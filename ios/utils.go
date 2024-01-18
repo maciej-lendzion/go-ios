@@ -108,6 +108,10 @@ func IOS14() *semver.Version {
 	return semver.MustParse("14.0")
 }
 
+func IOS13() *semver.Version {
+	return semver.MustParse("13.0")
+}
+
 func IOS12() *semver.Version {
 	return semver.MustParse("12.0")
 }

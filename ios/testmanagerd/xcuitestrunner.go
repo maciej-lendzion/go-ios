@@ -378,7 +378,7 @@ func RunXCUIWithBundleIdsCtx(
 		return err
 	}
 	log.Debugf("%v", version)
-	if version.LessThan(ios.IOS14()) {
+	if version.LessThan(ios.IOS13()) {
 		log.Infof("iOS version: %s detected, running with ios11 support", version)
 		return RunXCUIWithBundleIds11Ctx(ctx, bundleID, testRunnerBundleID, xctestConfigFileName, device, wdaargs, wdaenv)
 	}
