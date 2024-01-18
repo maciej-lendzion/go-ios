@@ -2,6 +2,7 @@ package testmanagerd
 
 import (
 	"context"
+	"strconv"
 	"strings"
 
 	"github.com/danielpaulus/go-ios/ios"
@@ -43,6 +44,18 @@ func RunXCUIWithBundleIds11Ctx(
 	ideDaemonProxy2.ideInterface.testConfig = testConfig
 	// TODO: fixme
 	protocolVersion := uint64(29)
+	for _, arg := range args {
+		if strings.HasPrefix(arg, "ControlPort") {
+			splitArg := strings.Split(arg, "=")
+			if len(splitArg) > 1 {
+				protocolVersion, err = strconv.ParseUint(splitArg[1], 10, 64)
+				if err != nil {
+					return err
+				}
+				break
+			}
+		}
+	}
 	_, err = ideDaemonProxy.daemonConnection.initiateSessionWithIdentifier(testSessionId, protocolVersion)
 	if err != nil {
 		return err
@@ -68,7 +81,7 @@ func RunXCUIWithBundleIds11Ctx(
 	ideInterfaceChannel := ideDaemonProxy.dtxConnection.ForChannelRequest(ProxyDispatcher{id: "emty"})
 
 	log.Debug("start executing testplan")
-	err = ideDaemonProxy2.daemonConnection.startExecutingTestPlanWithProtocolVersion(ideInterfaceChannel, 29)
+	err = ideDaemonProxy2.daemonConnection.startExecutingTestPlanWithProtocolVersion(ideInterfaceChannel, protocolVersion)
 	if err != nil {
 		log.Error(err)
 	}
